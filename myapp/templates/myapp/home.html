@@ -1,0 +1,282 @@
+{% extends 'myapp/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Главная" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Поиск с подсказками -->
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <div class="search-container">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="{% trans 'Поиск статей...' %}" 
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                           title="{% trans 'Введите ключевые слова для поиска статей' %}">
+                    <button class="btn btn-primary" type="button" id="searchButton">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры по категориям -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="category-filter">
+                <button class="btn btn-outline-primary active" data-category="all">{% trans "Все" %}</button>
+                <button class="btn btn-outline-primary" data-category="tech">{% trans "Технологии" %}</button>
+                <button class="btn btn-outline-primary" data-category="science">{% trans "Наука" %}</button>
+                <button class="btn btn-outline-primary" data-category="health">{% trans "Здоровье" %}</button>
+                <button class="btn btn-outline-primary" data-category="education">{% trans "Образование" %}</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Рекомендуемые статьи -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-3">
+                <i class="bi bi-star-fill text-warning"></i> 
+                {% trans "Рекомендуемые статьи" %}
+                <small class="text-muted">({% trans "на основе ваших интересов" %})</small>
+            </h3>
+            <div class="row" id="recommendedArticles">
+                {% for article in articles|slice:":3" %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-primary">{% trans "Рекомендуем" %}</span>
+                        </div>
+                        <img src="{{ article.image_url }}" class="card-img-top" alt="{{ article.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <p class="card-text">{{ article.description }}</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar"></i> {{ article.created_at|date:"d.m.Y" }}
+                                </small>
+                            </p>
+                            <a href="{{ article.url }}" class="btn btn-primary" target="_blank">
+                                <i class="bi bi-arrow-right"></i> {% trans "Читать далее" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Результаты поиска -->
+    <div id="searchResults" class="row mb-4" style="display: none;">
+        <div class="col-12">
+            <h3 class="mb-3">
+                <i class="bi bi-search"></i> 
+                {% trans "Результаты поиска" %}
+                <small class="text-muted" id="searchCount"></small>
+            </h3>
+            <div id="searchResultsContent" class="row"></div>
+        </div>
+    </div>
+
+    <!-- Все статьи -->
+    <div id="allArticles">
+        <div class="row">
+            {% for article in articles %}
+            <div class="col-md-4 mb-4 article-card" 
+                 data-title="{{ article.title|lower }}" 
+                 data-description="{{ article.description|lower }}"
+                 data-category="{{ article.category|default:'all' }}">
+                <div class="card h-100">
+                    <img src="{{ article.image_url }}" class="card-img-top" alt="{{ article.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text">{{ article.description }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar"></i> {{ article.created_at|date:"d.m.Y" }}
+                            </small>
+                        </p>
+                        <a href="{{ article.url }}" class="btn btn-primary" target="_blank">
+                            <i class="bi bi-arrow-right"></i> {% trans "Читать далее" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const searchResults = document.getElementById('searchResults');
+    const searchResultsContent = document.getElementById('searchResultsContent');
+    const searchCount = document.getElementById('searchCount');
+    const allArticles = document.getElementById('allArticles');
+    const articleCards = document.querySelectorAll('.article-card');
+    const categoryButtons = document.querySelectorAll('.category-filter .btn');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+
+    // Поиск по статьям
+    function performSearch() {
+        const searchTerm = searchInput.value.toLowerCase();
+        let hasResults = false;
+        let resultCount = 0;
+
+        // Очищаем предыдущие результаты
+        searchResultsContent.innerHTML = '';
+
+        articleCards.forEach(card => {
+            const title = card.dataset.title;
+            const description = card.dataset.description;
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                hasResults = true;
+                resultCount++;
+                const clone = card.cloneNode(true);
+                searchResultsContent.appendChild(clone);
+            }
+        });
+
+        // Показываем/скрываем результаты поиска
+        if (searchTerm && hasResults) {
+            searchResults.style.display = 'block';
+            allArticles.style.display = 'none';
+            searchCount.textContent = `(${resultCount} ${resultCount === 1 ? 'статья' : 'статей'})`;
+        } else {
+            searchResults.style.display = 'none';
+            allArticles.style.display = 'block';
+        }
+    }
+
+    // Фильтрация по категориям
+    function filterByCategory(category) {
+        articleCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            if (category === 'all' || cardCategory === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Обработчики событий
+    searchInput.addEventListener('input', performSearch);
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    // Обработчики категорий
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            filterByCategory(this.dataset.category);
+        });
+    });
+
+    // Подсказки при поиске
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        if (searchTerm.length < 2) {
+            searchSuggestions.style.display = 'none';
+            return;
+        }
+
+        const suggestions = [];
+        articleCards.forEach(card => {
+            const title = card.dataset.title;
+            if (title.includes(searchTerm)) {
+                suggestions.push(title);
+            }
+        });
+
+        if (suggestions.length > 0) {
+            searchSuggestions.innerHTML = suggestions
+                .map(suggestion => `<div class="search-suggestion-item">${suggestion}</div>`)
+                .join('');
+            searchSuggestions.style.display = 'block';
+        } else {
+            searchSuggestions.style.display = 'none';
+        }
+    });
+
+    // Закрытие подсказок при клике вне поля поиска
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+            searchSuggestions.style.display = 'none';
+        }
+    });
+
+    // Выбор подсказки
+    searchSuggestions.addEventListener('click', function(e) {
+        if (e.target.classList.contains('search-suggestion-item')) {
+            searchInput.value = e.target.textContent;
+            searchSuggestions.style.display = 'none';
+            performSearch();
+        }
+    });
+});
+</script>
+
+<style>
+.card {
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #2b3035;
+    border-color: #373b3e;
+}
+
+[data-bs-theme="dark"] .card-title,
+[data-bs-theme="dark"] .card-text {
+    color: #e9ecef;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #adb5bd !important;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.5em 1em;
+}
+
+.search-suggestions {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-suggestion-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-suggestion-item:hover {
+    background-color: var(--bs-primary-bg-subtle);
+}
+</style>
+{% endblock %}

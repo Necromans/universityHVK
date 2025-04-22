@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-22 22:53+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: myapp/templates/myapp/base.html
+msgid "Новостной портал"
+msgstr "News Portal"
+
+#: myapp/templates/myapp/base.html
+msgid "Главная"
+msgstr "Home"
+
+#: myapp/templates/myapp/base.html
+msgid "Категории"
+msgstr "Categories"
+
+#: myapp/templates/myapp/base.html
+msgid "Технологии"
+msgstr "Technology"
+
+#: myapp/templates/myapp/base.html
+msgid "Наука"
+msgstr "Science"
+
+#: myapp/templates/myapp/base.html
+msgid "Здоровье"
+msgstr "Health"
+
+#: myapp/templates/myapp/base.html
+msgid "Образование"
+msgstr "Education"
+
+#: myapp/templates/myapp/base.html
+msgid "Чат с ботом"
+msgstr "Chat with Bot"
+
+#: myapp/templates/myapp/base.html
+msgid "Профиль"
+msgstr "Profile"
+
+#: myapp/templates/myapp/base.html
+msgid "Выйти"
+msgstr "Logout"
+
+#: myapp/templates/myapp/base.html
+msgid "Войти"
+msgstr "Login"
+
+#: myapp/templates/myapp/base.html
+msgid "Регистрация"
+msgstr "Register"
+
+#: myapp/templates/myapp/base.html
+msgid "Переключить тему"
+msgstr "Toggle theme"
+
+#: myapp/templates/myapp/base.html
+msgid "Все права защищены."
+msgstr "All rights reserved."
+
+#: myapp/templates/myapp/home.html
+msgid "Поиск статей..."
+msgstr "Search articles..."
+
+#: myapp/templates/myapp/home.html
+msgid "Введите ключевые слова для поиска статей"
+msgstr "Enter keywords to search articles"
+
+#: myapp/templates/myapp/home.html
+msgid "Все статьи"
+msgstr "All Articles"
+
+#: myapp/templates/myapp/home.html
+msgid "Рекомендуемые статьи"
+msgstr "Recommended Articles"
+
+#: myapp/templates/myapp/home.html
+msgid "на основе ваших интересов"
+msgstr "based on your interests"
+
+#: myapp/templates/myapp/home.html
+msgid "Рекомендуем"
+msgstr "Recommended"
+
+#: myapp/templates/myapp/home.html
+msgid "Читать далее"
+msgstr "Read more"
+
+#: myapp/templates/myapp/home.html
+msgid "Результаты поиска"
+msgstr "Search Results"
+
+#: myapp/templates/myapp/home.html
+msgid "статья"
+msgstr "article"
+
+#: myapp/templates/myapp/home.html
+msgid "статей"
+msgstr "articles" 

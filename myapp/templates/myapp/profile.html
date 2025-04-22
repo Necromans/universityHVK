@@ -1,0 +1,37 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="text-center mb-4">
+        {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="Avatar" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px;">
+                <span style="font-size: 4rem;">{{ user.username|first|upper }}</span>
+            </div>
+        {% endif %}
+        <h2>{{ user.username }}</h2>
+        <p class="text-muted">{{ user.email }}</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Информация о пользователе</h5>
+            <ul class="list-unstyled">
+                <li><strong>Имя пользователя:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                {% if user.date_of_birth %}
+                    <li><strong>Дата рождения:</strong> {{ user.date_of_birth }}</li>
+                {% endif %}
+                <li><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y" }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="{% url 'home' %}" class="btn btn-outline-primary">На главную</a>
+    </div>
+</div>
+{% endblock %} 
