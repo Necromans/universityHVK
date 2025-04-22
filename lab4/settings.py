@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'compressor',
     'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
-    'bootstrap5',
-    'bootstrap_icons',
+    'django_bootstrap5',
+    'django_bootstrap_icons',
     'django_browser_reload',
     'simple_history',
 ]

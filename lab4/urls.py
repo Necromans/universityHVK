@@ -22,6 +22,7 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 urlpatterns += i18n_patterns(
